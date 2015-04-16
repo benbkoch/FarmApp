@@ -4,13 +4,15 @@ public class Prescription {
 	private boolean isFulfilled, isPickedUp;
 	private Patient patient;
 	private int id;
+	private int refill;
 	
 	
-	public Prescription(String drugName, String drugDose, String instructions, Patient patient, int id) {
+	public Prescription(String drugName, String drugDose, String instructions, Patient patient, int id, int ref) {
 		super();
 		this.drugName = drugName;
 		this.drugDose = drugDose;
 		this.instructions = instructions;
+		refill = ref;
 		isFulfilled = false;
 		isPickedUp = false;
 		this.patient = patient;
@@ -71,5 +73,13 @@ public class Prescription {
 
 	public String getID() {
 		return "" + id;
+	}
+
+	public int getRefill() {
+		return refill;
+	}
+
+	public void setRefill(int refill) {
+		this.refill = refill;
 	}
 }

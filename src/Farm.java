@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -19,6 +21,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class Farm {
 
@@ -41,9 +44,14 @@ public class Farm {
 	private List prescriptionsListBox;
 	private Table tablePrescriptions;
 	private Text searchText;
+	private Button buttonRemovePatient;
 	
 	private static int nextID = 0;
 	private Button btnUpdate;
+	private Text txtAddNewPrescription;
+	private Text refills;
+	private Text txtPatientInformationError;
+	private Text txtPrescriptionError;
 
 	/**
 	 * Launch the application.
@@ -80,11 +88,11 @@ public class Farm {
 	 */
 	protected void createContents() {
 		shlFarmApplicationCecs = new Shell();
-		shlFarmApplicationCecs.setSize(640, 572);
+		shlFarmApplicationCecs.setSize(703, 671);
 		shlFarmApplicationCecs.setText("Farm Application CECS 343");
 
 		TabFolder tabFolder = new TabFolder(shlFarmApplicationCecs, SWT.NONE);
-		tabFolder.setBounds(10, 10, 612, 525);
+		tabFolder.setBounds(0, 0, 685, 624);
 
 		TabItem tbtmPharmacy = new TabItem(tabFolder, SWT.NONE);
 		tbtmPharmacy.setText("Doctor");
@@ -94,10 +102,10 @@ public class Farm {
 
 		Label label = new Label(composite_1, SWT.NONE);
 		label.setText("Patients");
-		label.setBounds(16, 48, 49, 13);
+		label.setBounds(16, 38, 68, 23);
 
-		Button button = new Button(composite_1, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
+		Button buttonAddPatient = new Button(composite_1, SWT.NONE);
+		buttonAddPatient.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
@@ -109,7 +117,7 @@ public class Farm {
 						|| dobText.getText().length() == 0) {
 					MissingInfo missing = new MissingInfo(
 							shlFarmApplicationCecs, SWT.DIALOG_TRIM);
-					missing.open();
+					txtPatientInformationError.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 				} else {
 
 					Patient patient = new Patient(firstnameText.getText(),
@@ -117,14 +125,16 @@ public class Farm {
 							addressText.getText(), dobText.getText());
 					patientsListBox.add(patient.getFullName());
 					patientsList.add(patient);
+					txtPatientInformationError.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				}
 			}
 		});
-		button.setText("Add Patient");
-		button.setBounds(16, 292, 114, 23);
+		buttonAddPatient.setText("Add Patient");
+		buttonAddPatient.setBounds(10, 292, 114, 28);
 
-		Button button_1 = new Button(composite_1, SWT.NONE);
-		button_1.addSelectionListener(new SelectionAdapter() {
+		buttonRemovePatient = new Button(composite_1, SWT.NONE);
+		buttonRemovePatient.setEnabled(false);
+		buttonRemovePatient.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = patientsListBox.getSelectionIndex();
@@ -132,68 +142,93 @@ public class Farm {
 				patientsList.remove(index);
 			}
 		});
-		button_1.setText("Remove Patient");
-		button_1.setBounds(128, 292, 148, 23);
+		buttonRemovePatient.setText("Remove Patient");
+		buttonRemovePatient.setBounds(141, 292, 133, 28);
 
 		Label label_1 = new Label(composite_1, SWT.NONE);
 		label_1.setText("Drug Name:");
-		label_1.setBounds(282, 29, 68, 13);
+		label_1.setBounds(333, 52, 87, 23);
 
 		Label label_2 = new Label(composite_1, SWT.NONE);
 		label_2.setText("Drug Dose:");
-		label_2.setBounds(282, 64, 68, 13);
+		label_2.setBounds(333, 81, 76, 28);
 
 		Label label_3 = new Label(composite_1, SWT.NONE);
 		label_3.setText("Instructions:");
-		label_3.setBounds(282, 98, 68, 13);
+		label_3.setBounds(333, 147, 87, 28);
 
 		drugNameBox = new Text(composite_1, SWT.BORDER);
-		drugNameBox.setBounds(356, 29, 76, 19);
+		drugNameBox.setBounds(426, 52, 114, 23);
 
 		drugDoseBox = new Text(composite_1, SWT.BORDER);
-		drugDoseBox.setBounds(356, 61, 76, 19);
+		drugDoseBox.setBounds(426, 81, 56, 23);
 
-		drugInstructionsBox = new Text(composite_1, SWT.BORDER);
-		drugInstructionsBox.setBounds(356, 95, 76, 19);
+		drugInstructionsBox = new Text(composite_1, SWT.BORDER | SWT.WRAP);
+		drugInstructionsBox.setBounds(426, 144, 181, 53);
 
 		Label label_4 = new Label(composite_1, SWT.NONE);
 		label_4.setText("Current Prescriptions");
-		label_4.setBounds(282, 137, 114, 13);
+		label_4.setBounds(317, 263, 136, 23);
 
 		Label label_5 = new Label(composite_1, SWT.NONE);
 		label_5.setText("First Name:");
-		label_5.setBounds(16, 331, 68, 13);
+		label_5.setBounds(19, 341, 76, 23);
 
 		Label label_6 = new Label(composite_1, SWT.NONE);
 		label_6.setText("Phone:");
-		label_6.setBounds(16, 388, 49, 13);
+		label_6.setBounds(19, 399, 49, 19);
 
 		Label label_7 = new Label(composite_1, SWT.NONE);
 		label_7.setText("Address:");
-		label_7.setBounds(16, 407, 49, 13);
+		label_7.setBounds(16, 424, 68, 23);
 
 		Label label_8 = new Label(composite_1, SWT.NONE);
 		label_8.setText("Insurance:");
-		label_8.setBounds(16, 426, 68, 13);
+		label_8.setBounds(19, 495, 68, 18);
 
 		Label label_9 = new Label(composite_1, SWT.NONE);
 		label_9.setText("DOB:");
-		label_9.setBounds(16, 450, 49, 13);
+		label_9.setBounds(19, 519, 49, 23);
 
 		firstnameText = new Text(composite_1, SWT.BORDER);
-		firstnameText.setBounds(91, 325, 153, 19);
+		firstnameText.setBounds(101, 341, 153, 23);
 
 		phoneText = new Text(composite_1, SWT.BORDER);
-		phoneText.setBounds(91, 382, 153, 19);
+		phoneText.setBounds(101, 399, 153, 23);
 
-		addressText = new Text(composite_1, SWT.BORDER);
-		addressText.setBounds(91, 401, 153, 19);
+		addressText = new Text(composite_1, SWT.BORDER | SWT.WRAP);
+		addressText.setBounds(101, 428, 181, 53);
 
 		insuranceText = new Text(composite_1, SWT.BORDER);
-		insuranceText.setBounds(91, 420, 153, 19);
+		insuranceText.setBounds(101, 492, 153, 23);
 
 		dobText = new Text(composite_1, SWT.BORDER);
-		dobText.setBounds(91, 444, 153, 19);
+		dobText.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				dobText.setText("");
+				dobText.setForeground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		dobText.setForeground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
+		dobText.setText("mm/dd/yyyy");
+		dobText.setBounds(101, 521, 98, 28);
 
 		patientsListBox = new List(composite_1, SWT.BORDER | SWT.H_SCROLL
 				| SWT.V_SCROLL);
@@ -205,49 +240,54 @@ public class Farm {
 				for(Patient patient : patientsList) {
 					if(patient.getFullName().equals(name)) {
 						index = patientsList.indexOf(patient);
+						buttonRemovePatient.setEnabled(true);
 						break;
 					}
 				}
 				showPrescriptionList(patientsList.get(index));
 			}
 		});
-		patientsListBox.setBounds(13, 67, 231, 219);
+		patientsListBox.setBounds(13, 67, 261, 219);
 
 		Label label_10 = new Label(composite_1, SWT.NONE);
 		label_10.setText("Last Name:");
-		label_10.setBounds(16, 353, 68, 13);
+		label_10.setBounds(19, 370, 76, 16);
 
 		lastnameText = new Text(composite_1, SWT.BORDER);
-		lastnameText.setBounds(91, 350, 153, 19);
+		lastnameText.setBounds(101, 370, 153, 23);
 
-		Button button_2 = new Button(composite_1, SWT.NONE);
-		button_2.addSelectionListener(new SelectionAdapter() {
+		Button addPrescriptButton = new Button(composite_1, SWT.NONE);
+		addPrescriptButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = patientsListBox.getSelectionIndex();
-				Patient patient = patientsList.get(index);
-				Prescription prescription = new Prescription(drugNameBox.getText(),
-						drugDoseBox.getText(), drugInstructionsBox.getText(), patient, nextID++);
-				patient.addPrescription(prescription);
-				prescriptions.add(prescription);
-				showPrescriptionList(patient);
-				drugNameBox.setText("");
-				drugDoseBox.setText("");
-				drugInstructionsBox.setText("");
+				try{
+					int ref = Integer.parseInt(refills.getText());
+					Patient patient = patientsList.get(index);
+					Prescription prescription = new Prescription(drugNameBox.getText(),
+							drugDoseBox.getText(), drugInstructionsBox.getText(), patient, nextID++, ref);
+					patient.addPrescription(prescription);
+					prescriptions.add(prescription);
+					showPrescriptionList(patient);
+					refills.setText("");
+					drugNameBox.setText("");
+					drugDoseBox.setText("");
+					drugInstructionsBox.setText("");
+					txtPrescriptionError.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+				} catch (Exception e1){
+					txtPrescriptionError.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+				}
+				
 			}
 		});
-		button_2.setText("Add Prescription");
-		button_2.setBounds(463, 29, 129, 23);
+		addPrescriptButton.setText("Add Prescription");
+		addPrescriptButton.setBounds(426, 203, 129, 28);
 
 		prescriptionsListBox = new List(composite_1, SWT.BORDER);
-		prescriptionsListBox.setBounds(282, 156, 308, 336);
-
-		Label label_11 = new Label(composite_1, SWT.NONE);
-		label_11.setText("Ben Koch GUI Design");
-		label_11.setBounds(13, 479, 228, 13);
+		prescriptionsListBox.setBounds(317, 292, 308, 273);
 
 		Label lblSearch = new Label(composite_1, SWT.NONE);
-		lblSearch.setBounds(16, 10, 49, 13);
+		lblSearch.setBounds(16, 10, 56, 22);
 		lblSearch.setText("Search:");
 
 		searchText = new Text(composite_1, SWT.BORDER);
@@ -267,11 +307,44 @@ public class Farm {
 				}
 			}
 		});
-		searchText.setBounds(71, 10, 173, 19);
-		composite_1.setTabList(new Control[] { button, button_1, firstnameText,
-				lastnameText, phoneText, addressText, insuranceText, dobText,
-				drugNameBox, drugDoseBox, drugInstructionsBox, patientsListBox,
-				button_2, prescriptionsListBox });
+		searchText.setBounds(78, 9, 173, 23);
+		
+		txtAddNewPrescription = new Text(composite_1, SWT.NONE);
+		txtAddNewPrescription.setText("Add New Prescription");
+		txtAddNewPrescription.setBounds(318, 20, 164, 26);
+		
+		refills = new Text(composite_1, SWT.BORDER);
+		refills.setBounds(426, 110, 56, 28);
+		
+		Label lblRefills = new Label(composite_1, SWT.NONE);
+		lblRefills.setText("Refills:");
+		lblRefills.setBounds(371, 115, 49, 28);
+		
+		Button refillButton = new Button(composite_1, SWT.NONE);
+		refillButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		refillButton.setText("Refill");
+		refillButton.setBounds(531, 259, 76, 28);
+		
+		txtPatientInformationError = new Text(composite_1, SWT.NONE);
+		txtPatientInformationError.setFont(SWTResourceManager.getFont("Segoe UI", 7, SWT.NORMAL));
+		txtPatientInformationError.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		txtPatientInformationError.setText("Patient information error: could not add patient");
+		txtPatientInformationError.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		txtPatientInformationError.setEditable(false);
+		txtPatientInformationError.setBounds(16, 555, 295, 19);
+		
+		txtPrescriptionError = new Text(composite_1, SWT.NONE);
+		txtPrescriptionError.setText("Prescription error: could not add prescription");
+		txtPrescriptionError.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		txtPrescriptionError.setFont(SWTResourceManager.getFont("Segoe UI", 7, SWT.NORMAL));
+		txtPrescriptionError.setEditable(false);
+		txtPrescriptionError.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		txtPrescriptionError.setBounds(317, 231, 295, 26);
+		composite_1.setTabList(new Control[]{patientsListBox, firstnameText, lastnameText, phoneText, addressText, insuranceText, dobText, buttonAddPatient, drugNameBox, drugDoseBox, drugInstructionsBox, addPrescriptButton, prescriptionsListBox, buttonRemovePatient});
 
 		TabItem tbtmDoctor = new TabItem(tabFolder, SWT.NONE);
 		tbtmDoctor.setText("Pharmacy");
@@ -280,7 +353,7 @@ public class Farm {
 		tbtmDoctor.setControl(composite);
 
 		tablePrescriptions = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION);
-		tablePrescriptions.setBounds(10, 22, 584, 330);
+		tablePrescriptions.setBounds(10, 22, 657, 330);
 		tablePrescriptions.setHeaderVisible(true);
 		tablePrescriptions.setLinesVisible(true);
 		
@@ -289,27 +362,27 @@ public class Farm {
 		tblclmnId.setText("ID");
 
 		TableColumn tblclmnName = new TableColumn(tablePrescriptions, SWT.NONE);
-		tblclmnName.setWidth(279);
+		tblclmnName.setWidth(254);
 		tblclmnName.setText("Name");
 
 		TableColumn tblclmnDrug = new TableColumn(tablePrescriptions, SWT.NONE);
-		tblclmnDrug.setWidth(100);
+		tblclmnDrug.setWidth(184);
 		tblclmnDrug.setText("Drug");
 
 		TableColumn tblclmnFulfilled = new TableColumn(tablePrescriptions, SWT.NONE);
-		tblclmnFulfilled.setWidth(100);
+		tblclmnFulfilled.setWidth(92);
 		tblclmnFulfilled.setText("Fulfilled?");
 
 		TableColumn tblclmnPickedup = new TableColumn(tablePrescriptions, SWT.NONE);
-		tblclmnPickedup.setWidth(100);
+		tblclmnPickedup.setWidth(166);
 		tblclmnPickedup.setText("PickedUp?");
 
 		Label lblPrescriptionDetails = new Label(composite, SWT.NONE);
-		lblPrescriptionDetails.setBounds(10, 359, 108, 13);
+		lblPrescriptionDetails.setBounds(10, 385, 146, 28);
 		lblPrescriptionDetails.setText("Prescription Details");
 
 		List list = new List(composite, SWT.BORDER);
-		list.setBounds(10, 378, 245, 111);
+		list.setBounds(10, 409, 245, 172);
 
 		Button btnMarkFulfilled = new Button(composite, SWT.NONE);
 		btnMarkFulfilled.addSelectionListener(new SelectionAdapter() {
@@ -329,7 +402,7 @@ public class Farm {
 				}
 			
 		});
-		btnMarkFulfilled.setBounds(400, 358, 83, 23);
+		btnMarkFulfilled.setBounds(385, 358, 95, 28);
 		btnMarkFulfilled.setText("Mark Fulfilled");
 
 		Button btnPickedUp = new Button(composite, SWT.NONE);
@@ -349,7 +422,7 @@ public class Farm {
 				}
 			}
 		});
-		btnPickedUp.setBounds(489, 358, 105, 23);
+		btnPickedUp.setBounds(503, 358, 108, 28);
 		btnPickedUp.setText("Mark Picked Up");
 		
 		btnUpdate = new Button(composite, SWT.NONE);
@@ -363,7 +436,7 @@ public class Farm {
 				}
 			}
 		});
-		btnUpdate.setBounds(261, 353, 95, 28);
+		btnUpdate.setBounds(268, 358, 95, 28);
 		btnUpdate.setText("Update");
 
 		// My init;
@@ -382,5 +455,9 @@ public class Farm {
 				prescriptionsListBox.add(prescription.getDrugName());
 			}
 		}
+	}
+	
+	protected void patientInfoError(){
+		txtPatientInformationError.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 	}
 }
