@@ -2,49 +2,45 @@
 public class Prescription {
 	private String drugName, drugDose, instructions;
 	private boolean isFulfilled, isPickedUp;
-	private Patient patient;
+	private String patientName, docusername;
 	private int id;
 	private int refill;
 	
 	
-	public Prescription(String drugName, String drugDose, String instructions, Patient patient, int id, int ref) {
+	public Prescription(String drugName, String drugDose, 
+			String instructions, String name, boolean ful, 
+			boolean picked, int ref, String docuser) {
 		super();
 		this.drugName = drugName;
 		this.drugDose = drugDose;
 		this.instructions = instructions;
+		patientName = name;
 		refill = ref;
-		isFulfilled = false;
-		isPickedUp = false;
-		this.patient = patient;
-		this.id = id;
-	}
-
-	public Patient getPatient() {
-		return patient;
+		isFulfilled = ful;
+		isPickedUp = picked;
+		docusername = docuser;
+		
 	}
 	
 	public String getPatientName() {
-		return patient.getFullName();
+		return patientName;
 	}
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
 
 	public boolean isFulfilled() {
 		return isFulfilled;
 	}
 
-	public void setFulfilled(boolean isFulfilled) {
-		this.isFulfilled = isFulfilled;
+	public void setFulfilled(boolean f) {
+		this.isFulfilled = f;
 	}
 
 	public boolean isPickedUp() {
 		return isPickedUp;
 	}
 
-	public void setPickedUp(boolean isPickedUp) {
-		this.isPickedUp = isPickedUp;
+	public void setPickedUp(boolean i) {
+		this.isPickedUp = i;
 	}
 
 	public String getDrugName() {
@@ -81,5 +77,13 @@ public class Prescription {
 
 	public void setRefill(int refill) {
 		this.refill = refill;
+	}
+
+	public String getDocusername() {
+		return docusername;
+	}
+
+	public void setDocusername(String docusername) {
+		this.docusername = docusername;
 	}
 }

@@ -3,24 +3,9 @@ import java.util.ArrayList;
 
 public class Patient {
 	
-	private String firstName, lastName, phone, address, dob;
+	private String name, phone, address, dob, doctorName;
 	private ArrayList<Prescription> prescriptions;
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
 
 	public String getPhone() {
 		return phone;
@@ -46,18 +31,15 @@ public class Patient {
 		this.dob = dob;
 	}
 	
-	public String getFullName() {
-		return firstName + " " + lastName;
-	}
 
-	public Patient(String firstName, String lastName, String phone,
-			String address, String dob) {
+	public Patient(String n, String phone,
+			String address, String dob, String docName) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.name = n;
 		this.phone = phone;
 		this.address = address;
 		this.dob = dob;
+		this.doctorName = docName;
 		
 		prescriptions = new ArrayList<Prescription>();
 	}
@@ -68,5 +50,21 @@ public class Patient {
 	
 	public ArrayList<Prescription> getPrescriptions() {
 		return prescriptions;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDoctorName() {
+		return doctorName;
+	}
+
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
 	}
 }
