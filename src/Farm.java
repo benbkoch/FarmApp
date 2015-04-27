@@ -59,39 +59,8 @@ public class Farm {
 	private Text doctorName;
 	private Text pharmName;
 
-//	/**
-//	 * Launch the application.
-//	 * 
-//	 * @param args
-//	 */
-//	public static void main(String[] args) {
-//		try {
-//			Farm window = new Farm();
-//			window.open();
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	/**
-//	 * Open the window.
-//	 * @wbp.parser.entryPoint
-//	 */
-//	public void open() {
-//		//User = user;
-//		Display display = Display.getDefault();
-//		createContents();
-//		shlFarmApplicationCecs.open();
-//		shlFarmApplicationCecs.layout();
-//		while (!shlFarmApplicationCecs.isDisposed()) {
-//			if (!display.readAndDispatch()) {
-//				display.sleep();
-//			}
-//		}
-//	}
 
-	
+
 
 	/**
 	 * Open the window.
